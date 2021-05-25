@@ -6,12 +6,12 @@ from m5.objects.FuncUnit import *
 
 class BranchUnit(FUDesc):
     opList = [ OpDesc(opClass='FloatCmp', opLat=2, pipelined=True),
-               OpDesc(opClass='SimdCmp', opLat=2, pipelined=True),
-               OpDesc(opClass='SimdFloatCmp', opLat=2, pipelined=True),
-               OpDesc(opClass='SimdReduceCmp', opLat=2, pipelined=True),
-               OpDesc(opClass='SimdFloatReduceCmp', opLat=2, pipelined=True),
-               OpDesc(opClass='SimdPredAlu'),
-               OpDesc(opClass='InstPrefetch')]
+                OpDesc(opClass='SimdCmp', opLat=2, pipelined=True),
+                OpDesc(opClass='SimdFloatCmp', opLat=2, pipelined=True),
+                OpDesc(opClass='SimdReduceCmp', opLat=2, pipelined=True),
+                OpDesc(opClass='SimdFloatReduceCmp', opLat=2, pipelined=True),
+                OpDesc(opClass='SimdPredAlu'),
+                OpDesc(opClass='InstPrefetch')]
     count = 1
 
 class IntALU(FUDesc):

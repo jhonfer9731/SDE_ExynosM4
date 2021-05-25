@@ -39,15 +39,13 @@ parser.add_option('--l3_lat', type="int", default=37, help="Shared L3 cache late
 
 # CPU Options
 
-# Debe ser 12 pero se baja a 8 por fetchWidth (12) is larger than compiled limit (8)
-parser.add_option('--fetch_width', type="int", default=8, help="CPU fetch width") #48 bytes (up to 12 ARM instructions) are read each cycle into the instruction queue
+parser.add_option('--fetch_width', type="int", default=12, help="CPU fetch width") #48 bytes (up to 12 ARM instructions) are read each cycle into the instruction queue
 parser.add_option('--decode_width', type="int", default=6, help="CPU decode width")
 parser.add_option('--rename_width', type="int", default=6, help="CPU rename width")
 parser.add_option('--commit_width', type="int", default=6, help="CPU commith width")
 
-# Debe ser 12 pero se baja a 8 por dispatchWidth (12) is larger than compiled limit (8)
-parser.add_option('--dispatch_width', type="int", default=8, help="CPU dispatch width")
-parser.add_option('--issue_width', type="int", default=8, help="CPU issue width")
+parser.add_option('--dispatch_width', type="int", default=12, help="CPU dispatch width")
+parser.add_option('--issue_width', type="int", default=12, help="CPU issue width")
 
 
 parser.add_option('--wb_width', type="int", default=6, help="CPU write back width") #Once execution is complete, µOPs may retire at a rate of up to 6 µOPs per cycle.
@@ -72,7 +70,7 @@ parser.add_option('--num_fu_FP_SIMD_ALU', type="int", default=3, help="Number of
 parser.add_option('--num_fu_read', type="int", default=1, help="Number of execution units for load instructions")
 parser.add_option('--num_fu_write', type="int", default=2, help="Number of execution units for store instructions")
 ## Hasta aqui vamos
-parser.add_option('--branch_predictor_type', type="int", default=5, help="Branch predictor type: 0 - BiModeBP, 1 - LTAGE, 2 - LocalBP, 3 - MultiperspectivePerceptron64KB, 4 - MultiperspectivePerceptron8KB, 5 - MultiperspectivePerceptronTAGE64KB, 6 - MultiperspectivePerceptronTAGE8KB, 7 - TAGE, 8 - TAGE_SC_L_64KB, 9 - TAGE_SC_L_8KB, 10 - TournamentBP")
+parser.add_option('--branch_predictor_type', type="int", default=6, help="Branch predictor type: 0 - BiModeBP, 1 - LTAGE, 2 - LocalBP, 3 - MultiperspectivePerceptron64KB, 4 - MultiperspectivePerceptron8KB, 5 - MultiperspectivePerceptronTAGE64KB, 6 - MultiperspectivePerceptronTAGE8KB, 7 - TAGE, 8 - TAGE_SC_L_64KB, 9 - TAGE_SC_L_8KB, 10 - TournamentBP")
 
 (options, args) = parser.parse_args()
 
@@ -99,7 +97,7 @@ system.mem_mode = 'timing'
 
 system.mem_ranges = [AddrRange('8GB')]
 
-# The line size in Bytes for all cache memories, toca especificar para cada cache
+# The line size in Bytes for all cache memories, no sabemos como especificar para cada cache
 system.cache_line_size = 64
 
 # Create and setup a Out-of-Order CPU. 
@@ -203,8 +201,6 @@ system.cpu.l2cache.connectCPUSideBus(system.cpu.l2bus)
 system.l3cache = L3Cache(options)
 # Connect with L2 cache
 system.l3cache.connectCPUSideCache(system.cpu.l2cache)
-
-
 system.membus = SystemXBar()
 system.l3cache.connectMemSideBus(system.membus)
 
