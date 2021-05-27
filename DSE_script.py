@@ -1,46 +1,61 @@
 import os
 import sys
+import datetime as dt
+import json
+import time
+import pandas as pd
+carpeta= 'm5out/'
+params=['final_tick','system.cpu.cpi_total','host_seconds']
 
-GEM5PATH="/home/jhon/mytools/gem5/build/ARM"
-SCRIPTPATH="/home/jhon/mytools/gem5/configs/tutorial/ExynosM4"
-WORKLOADS="/home/jhon/mytools/workloads"
+tabla_simu = pd.DataFrame(columns=params)
 
+indexFile=0
+for base, dirs, files in os.walk(carpeta):
+    
+    for nombreArchivo in files:
 
-memCacheL1ISize = ['32KB','128KB','256KB']
+        if "stats" not in nombreArchivo: continue
 
-for size in memCacheL1ISize:
+        values=[]
+        nombreArchivo=base+nombreArchivo
 
-    MOREOPTIONS="--l1i_size="+size
-    comando = f'{GEM5PATH}/gem5.fast {SCRIPTPATH}/ExynosM4.py --cmd={WORKLOADS}/jpeg2k_dec/jpg2k_dec --options="-i jpg2kdec_testfile.j2k -o jpg2kdec_outfile.bmp" {MOREOPTIONS}'
-    os.system(comando)
+        """ Se abre el archivo de estadisticas para el procesador Exynos M4 """
 
-    """ Se abre el archivo de estadisticas para el procesador Exynos M4 """
+        try:
+            stats_file = open(nombreArchivo)
+        except IOError:
+            print("******ERROR: File not found or can't open stat file******")
+            sys.exit(1)
 
-    try:
-        stats_file = open("m5out/stats.txt")
-    except IOError:
-        print("******ERROR: File not found or can't open stat file******")
-        sys.exit(1)
-
-    stats = {}
-    count = 2
-    for line in stats_file:
-        if "---" in line: continue
-        lineArray = line.split(" ")
-        Name = lineArray[0]             #we got name from stat file
-        val = ''
-        for e in lineArray:
-            try:
-                val = int(e)            #int value from each line
-            except ValueError:
+        stats = {}
+        count = 2
+        for line in stats_file:
+            
+            if "---" in line: continue
+            lineArray = line.split(" ")
+            name = lineArray[0]   #we got name from stat file
+            if name not in params: continue # Se descarta los parametros que no se quieran seleccionar y por lo tanto no estan en la lista params
+            val = ''
+            for e in lineArray:
                 try:
-                    val = float(e)      #float value from each line
+                    val = int(e)            #int value from each line
                 except ValueError:
-                    continue
+                    try:
+                        val = float(e)      #float value from each line
+                    except ValueError:
+                        continue
 
-        #print "%d Name: %s \tValue: %s" %(count,Name ,val)
-        count += 1
-        stats[Name] = val               #storing the value in stat array
-    print(stats)
+            #print "%d Name: %s \tValue: %s" %(count,Name ,val)
+            count += 1
+            stats[name] = val               #storing the value in stat array
+        tabla_simu = tabla_simu.append(stats,ignore_index=True) # Se agrega una simulacion a la tabla
+
+
+
+print(tabla_simu)
+
 
     
+
+
+        

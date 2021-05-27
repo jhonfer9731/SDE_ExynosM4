@@ -19,6 +19,7 @@ parser.add_option('-o','--options',action="store", type="string",
                       default="",help="Workload's command line options")
 
 # Memory Options
+
 parser.add_option('--l1i_size', type="string", default="64kB", help="L1 instruction cache size")
 parser.add_option('--l1i_assoc', type="int", default=4, help="L1 instruction cache associativity")
 parser.add_option('--l1i_lat', type="int", default=2, help="L1 instruction cache latency")
@@ -70,7 +71,7 @@ parser.add_option('--num_fu_FP_SIMD_ALU', type="int", default=3, help="Number of
 parser.add_option('--num_fu_read', type="int", default=1, help="Number of execution units for load instructions")
 parser.add_option('--num_fu_write', type="int", default=2, help="Number of execution units for store instructions")
 ## Hasta aqui vamos
-parser.add_option('--branch_predictor_type', type="int", default=6, help="Branch predictor type: 0 - BiModeBP, 1 - LTAGE, 2 - LocalBP, 3 - MultiperspectivePerceptron64KB, 4 - MultiperspectivePerceptron8KB, 5 - MultiperspectivePerceptronTAGE64KB, 6 - MultiperspectivePerceptronTAGE8KB, 7 - TAGE, 8 - TAGE_SC_L_64KB, 9 - TAGE_SC_L_8KB, 10 - TournamentBP")
+parser.add_option('--branch_predictor_type', type="int", default=10, help="Branch predictor type: 0 - BiModeBP, 1 - LTAGE, 2 - LocalBP, 3 - MultiperspectivePerceptron64KB, 4 - MultiperspectivePerceptron8KB, 5 - MultiperspectivePerceptronTAGE64KB, 6 - MultiperspectivePerceptronTAGE8KB, 7 - TAGE, 8 - TAGE_SC_L_64KB, 9 - TAGE_SC_L_8KB, 10 - TournamentBP")
 
 (options, args) = parser.parse_args()
 
